@@ -1,8 +1,8 @@
 use std::error;
 
 mod collection;
-mod ui;
 mod gui;
+mod ui;
 
 fn main() -> Result<(), Box<dyn error::Error>> {
     let collection = collection::Collection::load_from_file()?;

@@ -5,7 +5,7 @@ use std::io::prelude::*;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Collection {
     pub owner: String,
     pub decks: Vec<Deck>,
@@ -71,7 +71,7 @@ impl Collection {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Deck {
     pub title: String,
     pub cards: Vec<Card>,
@@ -90,7 +90,7 @@ impl Deck {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Card {
     pub question: String,
     pub answer: String,
