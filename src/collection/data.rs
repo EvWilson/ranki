@@ -1,4 +1,4 @@
-use std::error;
+use std::error::Error;
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Collection {
+    pub uuid: u32,
     pub owner: String,
     pub decks: Vec<Deck>,
 }
@@ -16,6 +17,7 @@ impl Collection {
 
     fn new() -> Self {
         Collection {
+            uuid: 0,
             owner: "".to_string(),
             decks: Vec::new(),
         }
@@ -30,19 +32,22 @@ impl Collection {
         self.decks.push(deck);
     }
 
-    pub fn remove_deck_by_pos(&mut self, idx: usize) -> Result<Deck, Box<dyn error::Error>> {
+    pub fn remove_deck_by_pos(&mut self, idx: usize) -> Result<Deck, Box<dyn Error>> {
         if idx > self.decks.len() {
             return Err(Box::new(AnkiError::IndexOutOfBounds(idx)));
         }
         Ok(self.decks.remove(idx))
     }
 
-    pub fn load_from_file() -> Result<Self, Box<dyn error::Error>> {
+    pub fn load_from_file() -> Result<Self, Box<dyn Error>> {
         let mut config_file = match File::open(Collection::CONFIG_FILE) {
             Ok(file) => file,
             Err(error) => {
                 // TODO: only create new file on NotFound error. Otherwise propogate.
-                println!("error opening conf file: {:?}", error);
+                println!(
+                    "error opening conf file: {:?}. Continuing to work anyway.",
+                    error
+                );
                 return Ok(Collection::new());
             }
         };
@@ -58,7 +63,7 @@ impl Collection {
         println!("{:?}", &self);
     }
 
-    pub fn flush_to_file(&self) -> Result<(), Box<dyn error::Error>> {
+    pub fn flush_to_file(&self) -> Result<(), Box<dyn Error>> {
         let mut file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -120,7 +125,7 @@ impl fmt::Display for AnkiError {
     }
 }
 
-impl error::Error for AnkiError {
+impl Error for AnkiError {
     fn description(&self) -> &str {
         match *self {
             AnkiError::IndexOutOfBounds(_idx) => {

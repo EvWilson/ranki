@@ -1,16 +1,20 @@
 use std::error;
+use std::sync::mpsc;
+use std::thread;
 
 mod collection;
 mod gui;
-mod ui;
 
 fn main() -> Result<(), Box<dyn error::Error>> {
-    let collection = collection::Collection::load_from_file()?;
-    //process_args(&mut collection, get_args())?;
-    //collection.flush_to_file()?;
+    let (tx, rx) = mpsc::channel();
 
-    //ui::render(collection);
-    gui::render(collection);
+    let mut collection_service = collection::CollectionService::new()?;
+
+    thread::spawn(move || {
+        collection_service.listen(rx);
+    });
+
+    gui::render(tx);
 
     Ok(())
 }
