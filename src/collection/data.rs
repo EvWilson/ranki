@@ -7,9 +7,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Collection {
-    pub uuid: u32,
+    pub id: u32,
     pub owner: String,
     pub decks: Vec<Deck>,
+    curr_deck_id: u32,
 }
 
 impl Collection {
@@ -17,18 +18,20 @@ impl Collection {
 
     fn new() -> Self {
         Collection {
-            uuid: 0,
+            id: 0,
             owner: "".to_string(),
             decks: Vec::new(),
+            curr_deck_id: 0,
         }
     }
 
     pub fn add_deck(&mut self, title: &str) {
         let deck = Deck {
+            id: self.curr_deck_id,
             title: title.to_string(),
             cards: Vec::new(),
         };
-
+        self.curr_deck_id += 1;
         self.decks.push(deck);
     }
 
@@ -37,6 +40,18 @@ impl Collection {
             return Err(Box::new(AnkiError::IndexOutOfBounds(idx)));
         }
         Ok(self.decks.remove(idx))
+    }
+
+    pub fn remove_deck_by_id(&mut self, id: u32) -> Option<Deck> {
+        if let Some(pos) = self.decks.iter().position(|deck| deck.id == id) {
+            Some(self.decks.remove(pos))
+        } else {
+            None
+        }
+    }
+
+    pub fn contains_deck_id(&self, id: u32) -> bool {
+        return self.decks.iter().any(|deck| deck.id == id);
     }
 
     pub fn load_from_file() -> Result<Self, Box<dyn Error>> {
@@ -78,13 +93,15 @@ impl Collection {
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Deck {
+    pub id: u32,
     pub title: String,
     pub cards: Vec<Card>,
 }
 
 impl Deck {
-    fn new() -> Self {
+    fn new(id: u32) -> Self {
         Deck {
+            id,
             title: "".to_string(),
             cards: Vec::new(),
         }

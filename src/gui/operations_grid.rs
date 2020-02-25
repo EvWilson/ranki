@@ -43,12 +43,9 @@ impl Widget for OpGrid {
             (OpGridMsg::Add, ModalState::Add(_))
             | (OpGridMsg::Delete, ModalState::Delete(_))
             | (OpGridMsg::Edit, ModalState::Edit(_)) => {
-                println!("Setting modal state to same val, aborting");
                 return;
             }
-            _ => {
-                println!("Modal state being updated, continuing");
-            }
+            _ => {}
         }
 
         // Remove old modal state, if applicable
@@ -62,19 +59,16 @@ impl Widget for OpGrid {
 
         match event {
             OpGridMsg::Add => {
-                println!("op grid add event");
                 let widget = self
                     .mod_box
                     .add_widget::<AddDeckWidget>(self.model.tx.clone());
                 self.model.modal_state = ModalState::Add(widget);
             }
             OpGridMsg::Edit => {
-                println!("op grid edit event");
                 let widget = self.mod_box.add_widget::<EditDeckWidget>(());
                 self.model.modal_state = ModalState::Edit(widget);
             }
             OpGridMsg::Delete => {
-                println!("op grid delete event");
                 let widget = self.mod_box.add_widget::<DeleteDeckWidget>(());
                 self.model.modal_state = ModalState::Delete(widget);
             }
