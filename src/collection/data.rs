@@ -1,5 +1,4 @@
 use std::error::Error;
-//use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
 use std::time::SystemTime;
@@ -80,15 +79,6 @@ impl Collection {
         Err(format!("could not find deck by id {}", deck_id))
     }
 
-    /*
-    pub fn remove_deck_by_pos(&mut self, idx: usize) -> Result<Deck, Box<dyn Error>> {
-        if idx > self.decks.len() {
-            return Err(Box::new(AnkiError::IndexOutOfBounds(idx)));
-        }
-        Ok(self.decks.remove(idx))
-    }
-    */
-
     pub fn remove_deck_by_id(&mut self, id: u32) -> Option<Deck> {
         if let Some(pos) = self.decks.iter().position(|deck| deck.id == id) {
             Some(self.decks.remove(pos))
@@ -104,12 +94,6 @@ impl Collection {
             None
         }
     }
-
-    /*
-    pub fn contains_deck_id(&self, id: u32) -> bool {
-        return self.decks.iter().any(|deck| deck.id == id);
-    }
-    */
 
     pub(super) fn get_quiz(&self) -> Vec<(u32, u32, String, String)> {
         let mut quiz = vec![];
@@ -232,12 +216,6 @@ impl Deck {
         }
     }
 
-    /*
-    pub fn card_by_index(&self, idx: usize) -> Option<&Card> {
-        self.cards.get(idx)
-    }
-    */
-
     fn get_quiz(&self) -> Vec<(u32, String, String)> {
         let mut quiz = vec![];
         for card in &self.cards {
@@ -295,28 +273,3 @@ impl Card {
         self.stage = schedule(&self.stage, passed);
     }
 }
-
-/*
-#[derive(Debug)]
-enum AnkiError {
-    IndexOutOfBounds(usize),
-}
-
-impl fmt::Display for AnkiError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            AnkiError::IndexOutOfBounds(idx) => write!(f, "index {} is out of bounds", idx),
-        }
-    }
-}
-
-impl Error for AnkiError {
-    fn description(&self) -> &str {
-        match *self {
-            AnkiError::IndexOutOfBounds(_idx) => {
-                "index is outside bounds of vector under operation"
-            }
-        }
-    }
-}
-*/
