@@ -106,9 +106,13 @@ impl Widget for CardView {
             },
             #[name="active_card_label"]
             gtk::Label {},
-            #[name="cards"]
-            gtk::Box {
-                orientation: gtk::Orientation::Vertical,
+            gtk::ScrolledWindow {
+                min_content_height: 80,
+                shadow_type: gtk::ShadowType::Out,
+                #[name="cards"]
+                gtk::Box {
+                    orientation: gtk::Orientation::Vertical,
+                },
             },
             #[name="card_op_grid"]
             CardOpGrid(self.model.stream.clone()),

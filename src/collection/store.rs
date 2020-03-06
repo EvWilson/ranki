@@ -23,7 +23,13 @@ impl CollectionService {
     pub fn new(tx: mpsc::Sender<data::SendData>) -> Result<CollectionService, Box<dyn Error>> {
         let collection = data::Collection::load_from_file()?;
 
-        Ok(CollectionService { collection, tx })
+        let service = CollectionService { collection, tx };
+
+        if let Err(e) = service.send_update() {
+            println!("error sending initial collection: {}", e);
+        }
+
+        Ok(service)
     }
 
     pub fn listen(&mut self, rx: mpsc::Receiver<Action>) {

@@ -27,7 +27,6 @@ enum ModalState {
 // Lists operations available to perform on the collection, click buttons to
 // open the appropriate modals
 pub struct DeckOpModel {
-    //modal_state: ModalState,
     modal_state: Option<ModalState>,
     parent_stream: EventStream<DeckViewMsg>,
     stream: EventStream<DeckOpMsg>,

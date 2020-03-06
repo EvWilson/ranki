@@ -90,37 +90,6 @@ impl Widget for DeckView {
                 self.model.deck_map.insert(deck.id, widget);
             }
         }
-        /*
-        let mut remove_ids: Vec<u32> = vec![];
-
-        if let Ok(c) = self.model.collection.try_borrow() {
-            for deck in &c.decks {
-                // Add widget from updated collection if we don't already have it
-                if !self.model.deck_map.contains_key(&deck.id) {
-                    let widget = self.decks.add_widget::<DeckWidget>((
-                        deck.id,
-                        deck.title.clone(),
-                        self.model.stream.clone(),
-                    ));
-                    self.model.deck_map.insert(deck.id, widget);
-                }
-            }
-            // Remove any widget that we have that isn't in the update
-            for (id, _) in &self.model.deck_map {
-                if !c.contains_deck_id(*id) {
-                    remove_ids.push(*id);
-                }
-            }
-        }
-
-        for id in remove_ids {
-            if let Some(widget) = self.model.deck_map.remove(&id) {
-                self.decks.remove_widget(widget);
-            } else {
-                println!("error: couldn't find deck widget in deck view widget map");
-            }
-        }
-        */
     }
 
     view! {
@@ -131,9 +100,13 @@ impl Widget for DeckView {
             },
             #[name="active_deck_label"]
             gtk::Label {},
-            #[name="decks"]
-            gtk::Box {
-                orientation: gtk::Orientation::Vertical,
+            gtk::ScrolledWindow {
+                min_content_height: 80,
+                shadow_type: gtk::ShadowType::Out,
+                #[name="decks"]
+                gtk::Box {
+                    orientation: gtk::Orientation::Vertical,
+                },
             },
             #[name="deck_op_grid"]
             DeckOpGrid(self.model.stream.clone()),

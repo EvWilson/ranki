@@ -148,6 +148,9 @@ impl Widget for Win {
                 }
             }
             Msg::SelectedDeck(id) => {
+                if let Some(widget) = self.model.card_view.take() {
+                    self.card_view_box.remove_widget(widget);
+                }
                 if let Some(id) = id {
                     self.model.selected_deck = Some(id);
                     let widget = self.card_view_box.add_widget::<CardView>((
@@ -158,9 +161,6 @@ impl Widget for Win {
                     self.model.card_view = Some(widget);
                 } else {
                     self.model.selected_deck = None;
-                    if let Some(widget) = self.model.card_view.take() {
-                        self.card_view_box.remove_widget(widget);
-                    }
                 }
             }
             Msg::Tick => match self.model.rx.try_recv() {
