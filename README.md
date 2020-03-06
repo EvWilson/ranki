@@ -25,6 +25,7 @@ a delightful little library giving you a nice MVC, Elm-inspired wrapper on top
 of Rust's <a href="https://gtk-rs.org/">GTK bindings</a>. As such, you'll need
 to make sure to install the
 <a href="https://www.gtk.org/docs/installations/">GTK development dependencies</a>,
+and of course the <a href="https://www.rust-lang.org/tools/install">Rust toolchain</a>
 and then you should be one `cargo build --release` away from an eidetic memory.
 
 ## Modifying the Scheduling Algorithm
