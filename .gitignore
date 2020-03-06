@@ -1,2 +1,4 @@
 /target
 **/*.rs.bk
+
+anki.conf
