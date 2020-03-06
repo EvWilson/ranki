@@ -37,3 +37,10 @@ purposes, so whatever is in there now certainly isn't gospel.
 This project is a very alpha experience, so there may be a couple rough edges
 lurking in there somewhere. Feel free to log an issue in the tracker if you find
 one!
+
+## TODOs
+- More properly handle errors
+    - Panic on interthread communications
+    - Display error messages to GUI for recoverable scenarios
+    - Create custom error definition to enable propogation
+- Add comments throughout
