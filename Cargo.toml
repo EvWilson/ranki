@@ -1,5 +1,5 @@
 [package]
-name = "anki-rs"
+name = "ranki"
 version = "0.1.0"
 authors = ["Everett Wilson <everettwilson@pop-os.localdomain>"]
 edition = "2018"
