@@ -31,6 +31,7 @@ impl Widget for QuizView {
     fn update(&mut self, event: QuizMsg) {
         use QuizMsg::*;
 
+        self.alert.set_text("");
         match event {
             StartQuiz => {
                 self.model.parent_stream.emit(window::Msg::StartQuiz);
@@ -38,6 +39,11 @@ impl Widget for QuizView {
             GotQuiz(quiz) => {
                 // Don't start a new quiz if we already have one active
                 if let Some(_) = self.model.active_quiz {
+                    return;
+                }
+                // Also don't start a quiz if it has no entries
+                if quiz.len() < 1 {
+                    self.alert.set_text("No quiz entries are up for review!");
                     return;
                 }
                 let widget = self
@@ -60,6 +66,8 @@ impl Widget for QuizView {
         gtk::Box {
             orientation: gtk::Orientation::Vertical,
             halign: gtk::Align::Center,
+            #[name="alert"]
+            gtk::Label {},
             gtk::Button {
                 label: "Quiz Me!",
                 clicked => QuizMsg::StartQuiz,
