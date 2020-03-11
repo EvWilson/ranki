@@ -130,9 +130,14 @@ pub enum DeckMsg {
 #[widget]
 impl Widget for DeckWidget {
     fn model((id, deck_name, parent_stream): (u32, String, EventStream<DeckViewMsg>)) -> DeckModel {
+        let mut name = deck_name;
+        if name.chars().count() > 20 {
+            name = name.chars().take(20).collect::<String>();
+            name.push_str("...");
+        }
         DeckModel {
             id,
-            deck_name: format!("{}: {}", id, deck_name),
+            deck_name: format!("{}: {}", id, name),
             parent_stream,
         }
     }

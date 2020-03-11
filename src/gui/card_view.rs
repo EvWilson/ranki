@@ -134,8 +134,13 @@ pub enum CardMsg {
 #[widget]
 impl Widget for CardWidget {
     fn model((card_name, id, parent_stream): (String, u32, EventStream<CardViewMsg>)) -> CardModel {
+        let mut name = card_name;
+        if name.chars().count() > 20 {
+            name = name.chars().take(20).collect::<String>();
+            name.push_str("...");
+        }
         CardModel {
-            card_name: format!("{}: {}", id, card_name),
+            card_name: format!("{}: {}", id, name),
             id,
             parent_stream,
         }

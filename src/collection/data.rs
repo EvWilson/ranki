@@ -271,5 +271,6 @@ impl Card {
 
     fn process_result(&mut self, passed: bool) {
         self.stage = schedule(&self.stage, passed);
+        self.checked = SystemTime::now();
     }
 }
